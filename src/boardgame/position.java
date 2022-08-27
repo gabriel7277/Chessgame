@@ -1,6 +1,6 @@
 package boardgame;
 
-public class position {
+public class Position {
 	
 	
 	private int row;
@@ -22,7 +22,7 @@ public class position {
 		this.column = column;
 	}
 
-	public position(int row, int column) {
+	public Position(int row, int column) {
 		super();
 		this.row = row;
 		this.column = column;
