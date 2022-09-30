@@ -3,7 +3,7 @@ package application;
 import Chess.ChessMatch;
 
 
-public class program {
+public class Program {
 
 	public static void main(String[] args) {
 		
