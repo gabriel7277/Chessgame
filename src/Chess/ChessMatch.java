@@ -6,13 +6,28 @@ import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
 
+	
+	
+
 public class ChessMatch {
 
-	private static Board board;
+	private  Board board;
+	private int turn;
+	private Color currentPlayer;
 
 	public ChessMatch() {
 		board = new Board(8, 8);
+		turn = 1;
+		currentPlayer = Color.WHITE;
 		initialSetup();
+	}
+	
+	public int getTurn() {
+		return turn;
+	}
+	
+	public Color getCurrentPlayer() {
+		return currentPlayer;
 	}
 
 	public ChessPiece[][] getPieces() {
@@ -27,16 +42,17 @@ public class ChessMatch {
 	
 	public boolean [][] possibleMoves (ChessPosition sourcePosition){
 		Position position = sourcePosition.toPosition();
-		ValidateSoucePosition(position);
+		ValidateSourcePosition(position);
 		return board.piece(position).possibleMoves();
 	}
 	
 	public ChessPiece peformChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
 		Position source = sourcePosition.toPosition();
 		Position target = targetPosition.toPosition();
-		ValidateSoucePosition(source);
+		ValidateSourcePosition(source);
 		ValidateTargetPosition(source,target);
 		Piece capturedPiece = makeMove(source,target );
+		nextTurn();
 		return (ChessPiece)capturedPiece;
 	}
 	
@@ -47,10 +63,15 @@ public class ChessMatch {
 		return capturedPiece;
 	}
 	
-	private  void ValidateSoucePosition(Position position) {
+	private  void ValidateSourcePosition(Position position) {
 		if (!board.thereIsAPiece(position)) {
 			throw new ChessExcepcion("There is no piece on source position");	
 	}	
+		if(currentPlayer != ((ChessPiece)board.piece(position)).getColor()) {
+			
+			throw new ChessExcepcion("The chosen piece is not yours");
+	
+		}
 		if(!board.piece(position).IsThereAnyPossibleMove()) {
 			throw new ChessExcepcion("There is no possible moves for the chosen piece");
 		}
@@ -59,6 +80,11 @@ public class ChessMatch {
 		if(!board.piece(source).possibleMove(target)) {
 			throw new ChessExcepcion("The chosen piece can't move to target position ");
 		}
+	}
+	
+	private void nextTurn() {
+		turn++;
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
 	}
 	
 	
